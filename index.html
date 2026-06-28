@@ -47,12 +47,14 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { overflow-x: hidden; max-width: 100%; }
 body {
   font-family: 'Noto Sans SC', sans-serif;
   background: var(--paper);
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 /* ── TOP NAV ── */
@@ -114,6 +116,31 @@ nav {
 .page { display: none; padding-top: 52px; min-height: 100vh; }
 #scene-page { overflow-y: auto; max-height: 100vh; }
 .page.active { display: block; }
+
+/* ── 全站统一页脚（版权署名）── */
+.site-footer {
+  background: #0c0b08;
+  border-top: 1px solid rgba(245,243,237,.08);
+  padding: clamp(34px,5vh,54px) clamp(24px,6vw,72px);
+  text-align: center;
+}
+.site-footer .sf-brand {
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: 14px; letter-spacing: .2em; color: rgba(245,243,237,.72);
+  margin-bottom: 14px;
+}
+.site-footer .sf-brand .zhu { color: var(--zhu); letter-spacing: .12em; }
+.site-footer .sf-line {
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12px;
+  letter-spacing: .04em; line-height: 1.95; color: rgba(245,243,237,.42);
+}
+.site-footer .sf-line + .sf-line { margin-top: 2px; }
+/* 图谱页：不挡操作的轻量署名 */
+.graph-credit {
+  position: absolute; left: 16px; bottom: 13px; z-index: 6;
+  pointer-events: none; font-family: 'Noto Sans SC', sans-serif;
+  font-size: 10px; letter-spacing: .08em; color: rgba(245,243,237,.3);
+}
 
 /* ── HERO（新设计见下方「Hero 重设计 v2」）── */
 
@@ -252,7 +279,7 @@ nav {
 .book-row .row-tags { display: flex; flex-wrap: wrap; gap: 4px; flex-shrink: 0; max-width: 220px; align-self: center; }
 
 /* ── PAGINATION ── */
-.pagination { display: flex; justify-content: center; gap: 4px; padding: 24px; background: var(--paper2); border-top: 1px solid var(--border); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 24px; background: var(--paper2); border-top: 1px solid var(--border); }
 .pg-btn { padding: 5px 12px; font-size: 12px; border: 1px solid var(--border); background: var(--paper); cursor: pointer; color: var(--ink3); border-radius: 2px; }
 .pg-btn.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .pg-btn:disabled { opacity: 0.3; cursor: default; }
@@ -1247,6 +1274,12 @@ nav {
 
   <div id="book-container"></div>
   <div class="pagination" id="pagination"></div>
+
+  <footer class="site-footer">
+    <div class="sf-brand">东亚文学阅读地图 · 迷宫书店 <span class="zhu">MAZEBOOK</span></div>
+    <div class="sf-line">© 2026 迷宫书店 · 原创作品，保留所有权利。未经授权请勿复制、镜像或商用。</div>
+    <div class="sf-line">授权 / 合作 / 侵权举报：1197340750@qq.com ｜ 微信 Nai-yaa</div>
+  </footer>
 </div>
 
 
@@ -1265,6 +1298,12 @@ nav {
     </div>
     <div class="scene-book-grid" id="scene-book-grid"></div>
   </div>
+
+  <footer class="site-footer">
+    <div class="sf-brand">东亚文学阅读地图 · 迷宫书店 <span class="zhu">MAZEBOOK</span></div>
+    <div class="sf-line">© 2026 迷宫书店 · 原创作品，保留所有权利。未经授权请勿复制、镜像或商用。</div>
+    <div class="sf-line">授权 / 合作 / 侵权举报：1197340750@qq.com ｜ 微信 Nai-yaa</div>
+  </footer>
 </div>
 
 <!-- GRAPH PAGE -->
@@ -1322,6 +1361,7 @@ nav {
     <span style="color:#c45068">当代</span>
     <span style="color:#8060c8">未来</span>
   </div>
+  <div class="graph-credit">© 2026 迷宫书店 MAZEBOOK · 原创作品，保留所有权利</div>
 </div>
 
 <!-- ════════ 层 04 · 向导 GUIDE ════════ -->
@@ -1382,6 +1422,12 @@ nav {
     </div>
 
   </div>
+
+  <footer class="site-footer">
+    <div class="sf-brand">东亚文学阅读地图 · 迷宫书店 <span class="zhu">MAZEBOOK</span></div>
+    <div class="sf-line">© 2026 迷宫书店 · 原创作品，保留所有权利。未经授权请勿复制、镜像或商用。</div>
+    <div class="sf-line">授权 / 合作 / 侵权举报：1197340750@qq.com ｜ 微信 Nai-yaa</div>
+  </footer>
 </div>
 
 <!-- ════════ 层 05 · 为何而读 WHY READ ════════ -->
@@ -1436,6 +1482,13 @@ nav {
   background:transparent; color: rgba(245,243,237,.7); transition:.18s; line-height:1; }
 .why-pace:hover{ border-color: rgba(245,243,237,.5); color:#f7f5ef; }
 .why-pace.on{ background:#f7f5ef; color:#15130f; border-color:#f7f5ef; }
+.why-pace-custom-wrap{ display:none; align-items:baseline; gap:8px; font-family:'Noto Sans SC',sans-serif;
+  font-size:14px; letter-spacing:.04em; color:rgba(245,243,237,.72); margin-left:4px; }
+.why-pace-custom-wrap.show{ display:inline-flex; }
+#why-pace-custom{ width:58px; background:transparent; border:none; border-bottom:1px solid rgba(245,243,237,.35);
+  color:#f7f5ef; font-family:'Noto Serif SC',serif; font-weight:300; font-size:24px; text-align:center;
+  padding:0 2px; outline:none; transition:border-color .2s; }
+#why-pace-custom:focus{ border-bottom-color:var(--zhu); }
 .why-result{ margin-top: 38px; padding-top: 30px; border-top:1px solid rgba(245,243,237,.1); }
 .why-result-line{ font-family:'Noto Serif SC',serif; font-weight:300; font-size: clamp(18px,2vw,24px);
   letter-spacing:.03em; color: rgba(245,243,237,.78); display:flex; align-items:baseline; flex-wrap:wrap; gap:.4em; }
@@ -1519,6 +1572,8 @@ nav {
               <button type="button" class="why-pace" onclick="whyPace(this,6)">从容 · 一年 6 本</button>
               <button type="button" class="why-pace on" onclick="whyPace(this,12)">常态 · 一年 12 本</button>
               <button type="button" class="why-pace" onclick="whyPace(this,24)">如饥似渴 · 一年 24 本</button>
+              <button type="button" class="why-pace" onclick="whyPaceCustom(this)">其他…</button>
+              <span class="why-pace-custom-wrap" id="why-pace-custom-wrap">一年 <input type="number" id="why-pace-custom" min="1" max="365" placeholder="__" inputmode="numeric" oninput="whyPaceCustomInput()"> 本</span>
             </div>
           </div>
         </div>
@@ -3765,7 +3820,32 @@ function whyPace(btn, v){
   window._whyPace = v;
   document.querySelectorAll('.why-pace').forEach(function(x){ x.classList.remove('on'); });
   btn.classList.add('on');
+  var wrap = document.getElementById('why-pace-custom-wrap');
+  if (wrap) wrap.classList.remove('show');
   whyCalc();
+}
+function whyPaceCustom(btn){
+  document.querySelectorAll('.why-pace').forEach(function(x){ x.classList.remove('on'); });
+  btn.classList.add('on');
+  var wrap = document.getElementById('why-pace-custom-wrap');
+  var inp = document.getElementById('why-pace-custom');
+  if (wrap) wrap.classList.add('show');
+  if (inp){
+    inp.focus();
+    var v = parseInt(inp.value, 10);
+    if (!isNaN(v) && v > 0) window._whyPace = v;
+  }
+  whyCalc();
+}
+function whyPaceCustomInput(){
+  var inp = document.getElementById('why-pace-custom');
+  if (!inp) return;
+  var v = parseInt(inp.value, 10);
+  if (!isNaN(v) && v > 0){
+    if (v > 365) { v = 365; inp.value = 365; }
+    window._whyPace = v;
+    whyCalc();
+  }
 }
 function whyCalc(){
   var ageEl = document.getElementById('why-age');
