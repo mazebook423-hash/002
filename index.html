@@ -1,29 +1,48 @@
 <!DOCTYPE html>
+<!--
+  ════════════════════════════════════════════════════════════════
+  东亚文学阅读地图  ·  迷宫书店 MAZEBOOK
+  © 2026 迷宫书店（MAZEBOOK）. 版权所有 · All Rights Reserved.
+
+  本作品的视觉设计、文案、数据结构、交互与全部代码均为原创。
+  未经书面授权，禁止复制、镜像、再分发、二次销售或商业使用。
+  This is an original work. Unauthorized copying, mirroring,
+  redistribution, resale or commercial use is strictly prohibited.
+
+  授权 / 合作 / 侵权举报 → 邮箱 1197340750@qq.com ｜ 微信 Nai-yaa
+  origin-signature: mazebook-dctn-2026  （请勿删除，用于追溯盗版）
+  ════════════════════════════════════════════════════════════════
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="迷宫书店 MAZEBOOK">
+<meta name="copyright" content="© 2026 迷宫书店 MAZEBOOK. All Rights Reserved.">
+<meta name="robots" content="noarchive">
 <title>东亚文学阅读地图 · 中日韩</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;500;600;700&family=Noto+Sans+SC:wght@200;300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 <!-- 引入高性能图谱渲染库 -->
 
 <style>
 :root {
-  --ink: #1a1208;
-  --ink2: #3d2e1a;
-  --ink3: #6b5740;
-  --paper: #f8f4ed;
-  --paper2: #f0e9dc;
-  --paper3: #e8dece;
-  --red: #9b2335;
-  --red2: #c4394e;
-  --gold: #b8820a;
-  --gold2: #d4a520;
-  --teal: #1a6b6b;
-  --teal2: #2a8c8c;
-  --border: rgba(90,60,20,0.15);
-  --shadow: rgba(26,18,8,0.12);
+  --ink: #1c1a16;
+  --ink2: #423c33;
+  --ink3: #8a8175;
+  --paper: #f4f2ec;
+  --paper2: #ece9e1;
+  --paper3: #e3e0d5;
+  --red: #c5392c;
+  --red2: #dd5641;
+  --gold: #a98b4e;
+  --gold2: #c2a463;
+  --teal: #1f6f6c;
+  --teal2: #2f8f8b;
+  --border: rgba(40,32,20,0.10);
+  --shadow: rgba(26,18,8,0.08);
+  --line: rgba(40,32,20,0.10);
+  --zhu: #d8442f;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,7 +60,7 @@ nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   background: var(--ink);
   display: flex; align-items: center; gap: 0;
-  border-bottom: 2px solid var(--gold);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   height: 52px;
 }
 .nav-logo {
@@ -70,7 +89,7 @@ nav {
   padding: 0 20px; height: 100%;
   display: flex; align-items: center;
   color: rgba(248,244,237,0.6);
-  font-size: 13px; letter-spacing: 2px;
+  font-size: 13px; letter-spacing: 2px; white-space: nowrap;
   cursor: pointer; border: none; background: none;
   border-bottom: 2px solid transparent; margin-bottom: -2px;
   transition: all 0.2s;
@@ -82,62 +101,52 @@ nav {
   font-size: 11px; color: rgba(248,244,237,0.4);
   letter-spacing: 1px;
 }
+@media (max-width: 600px) {
+  .nav-logo { padding: 0 12px; }
+  .nav-logo-text { display: none; }
+  .nav-tabs { margin-left: 2px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab { padding: 0 12px; letter-spacing: .04em; font-size: 12px; flex: 0 0 auto; }
+  .nav-stats { display: none; }
+}
 
 /* ── PAGES ── */
 .page { display: none; padding-top: 52px; min-height: 100vh; }
 #scene-page { overflow-y: auto; max-height: 100vh; }
 .page.active { display: block; }
 
-/* ── HERO ── */
-.hero {
-  padding: 60px 40px 40px;
-  background: var(--ink);
-  position: relative; overflow: hidden;
-}
-.hero::before {
-  content: '文'; position: absolute; right: -20px; top: -40px;
-  font-family: 'ZCOOL XiaoWei'; font-size: 280px; color: rgba(255,255,255,0.03);
-  pointer-events: none; line-height: 1;
-}
-.hero-title {
-  font-family: 'ZCOOL XiaoWei', serif;
-  font-size: 42px; color: var(--paper);
-  letter-spacing: 6px; margin-bottom: 8px;
-  line-height: 1.2;
-}
-.hero-title em { color: var(--gold2); font-style: normal; }
-.hero-sub { font-size: 13px; color: rgba(248,244,237,0.5); letter-spacing: 3px; }
+/* ── HERO（新设计见下方「Hero 重设计 v2」）── */
 
 /* ── FILTER BAR ── */
 .filter-bar {
   background: var(--paper2);
   border-bottom: 1px solid var(--border);
-  padding: 12px 24px;
+  padding: 18px clamp(26px,6vw,104px);
   position: sticky; top: 52px; z-index: 50;
 }
 .filter-search {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
 }
 .filter-search input {
-  flex: 1; padding: 7px 12px;
+  flex: 1; padding: 10px 16px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 999px;
   background: var(--paper);
   font-family: 'Noto Sans SC'; font-size: 13px;
   color: var(--ink); outline: none;
   transition: border-color 0.2s;
 }
-.filter-search input:focus { border-color: var(--gold); }
-.filter-rows { display: flex; flex-direction: column; gap: 6px; }
-.filter-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.filter-label { font-size: 11px; color: var(--ink3); letter-spacing: 1px; min-width: 52px; }
+.filter-search input:focus { border-color: var(--ink3); }
+.filter-rows { display: flex; flex-direction: column; gap: 11px; }
+.filter-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.filter-label { font-size: 11px; color: var(--ink3); letter-spacing: 2px; min-width: 52px; }
 .chip {
-  padding: 2px 10px; font-size: 11px; border-radius: 2px;
+  padding: 3px 13px; font-size: 11px; border-radius: 999px;
   border: 1px solid var(--border); background: var(--paper);
-  color: var(--ink3); cursor: pointer; letter-spacing: 0.5px;
+  color: var(--ink3); cursor: pointer; letter-spacing: 0.04em;
   transition: all 0.15s;
 }
-.chip:hover { border-color: var(--gold); color: var(--gold); }
+.chip:hover { border-color: var(--ink3); color: var(--ink); }
 .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .chip.era-古代.on { background: #8b6914; border-color: #8b6914; }
 .chip.era-近代.on { background: #3d4a2a; border-color: #3d4a2a; }
@@ -150,6 +159,32 @@ nav {
   text-decoration: underline; letter-spacing: 0.5px;
 }
 .clear-btn:hover { color: var(--red); }
+
+/* ── 筛选折叠（移动端）── */
+.filter-toggle { display: none; }
+.ft-count {
+  min-width: 19px; height: 19px; padding: 0 6px; border-radius: 999px;
+  background: var(--zhu); color: #fff; font-size: 11px; line-height: 19px;
+  text-align: center; font-family: 'Noto Sans SC', sans-serif;
+}
+.ft-count:empty { display: none; }
+@media (max-width: 720px) {
+  .filter-toggle {
+    display: flex; align-items: center; gap: 9px; width: 100%;
+    margin-bottom: 4px; padding: 11px 16px;
+    border: 1px solid var(--border); border-radius: 999px;
+    background: var(--paper); color: var(--ink2); cursor: pointer;
+    font-family: 'Noto Sans SC', sans-serif; font-size: 12px; letter-spacing: .12em;
+  }
+  .filter-toggle .ft-chev { margin-left: auto; transition: transform .26s ease; }
+  .filter-bar.collapsed .filter-toggle .ft-chev { transform: rotate(-90deg); }
+  .filter-rows {
+    overflow: hidden; max-height: 1400px;
+    transition: max-height .34s ease, opacity .26s ease, margin .26s ease, padding .26s ease;
+    padding-top: 14px;
+  }
+  .filter-bar.collapsed .filter-rows { max-height: 0; opacity: 0; padding-top: 0; margin: 0; }
+}
 
 /* ── RESULT BAR ── */
 .result-bar {
@@ -519,56 +554,174 @@ nav {
 .mood-怀旧 { background: #f0e8d8; color: #6b4a20; }
 .mood-变迁 { background: #eee8dc; color: #5a4a2a; }
 
-/* ── Hero 重设计 ── */
+/* ── Hero 重设计 v3 · 沉浸星野 · 呼吸 + 震撼 ── */
 .hero {
-  padding: 72px 56px 52px;
-  border-bottom: 1px solid rgba(184,130,10,0.12);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
+  min-height: clamp(580px, 90vh, 940px);
+  display: flex; align-items: center;
+  background: radial-gradient(130% 92% at 76% 10%, #1b1914 0%, #100e0a 56%, #0a0906 100%);
+  padding: clamp(96px,12vh,150px) clamp(26px,6vw,104px) clamp(72px,9vh,104px);
+  border-bottom: none;
 }
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(184,130,10,0.04), transparent);
-  pointer-events: none;
+.hero::before { content: none; }
+.hero::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--paper));
+  z-index: 1; pointer-events: none;
 }
+.hero-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 0; display: block;
+}
+.hero-veil {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(78% 72% at 26% 46%, rgba(8,7,5,.62), transparent 72%),
+    radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(6,5,3,.5));
+}
+.hero-inner { max-width: 880px; position: relative; z-index: 2; width: 100%; }
+
 .hero-eyebrow {
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: 10px; letter-spacing: 5px;
-  color: var(--gold); opacity: 0.6;
-  margin-bottom: 16px;
-  text-transform: uppercase;
+  font-family: 'Noto Sans SC', sans-serif; font-weight: 400;
+  font-size: 11px; letter-spacing: .42em; line-height: 1;
+  color: rgba(245,243,237,.5); text-transform: uppercase;
+  margin-bottom: 22px;
 }
+.hero-kicker {
+  display: flex; align-items: center; gap: 13px;
+  font-family: 'Noto Serif SC', serif; font-weight: 400;
+  font-size: 13px; letter-spacing: .34em; color: rgba(245,243,237,.62);
+  margin-bottom: clamp(26px,4vh,40px);
+}
+.hero-kicker i {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(245,243,237,.45); display: inline-block;
+}
+
 .hero-title {
-  font-family: 'ZCOOL XiaoWei', serif;
-  font-size: clamp(28px, 4vw, 48px);
-  letter-spacing: 6px; color: var(--paper);
-  line-height: 1.15; margin-bottom: 12px;
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: clamp(46px,8.4vw,108px); line-height: 1.06;
+  letter-spacing: .055em; color: #f7f5ef; margin: 0;
+  text-shadow: 0 2px 40px rgba(0,0,0,.45);
 }
-.hero-title em { color: var(--gold); font-style: normal; }
-.hero-sub {
-  font-size: 13px; color: rgba(248,244,237,0.45);
-  letter-spacing: 2px; margin-bottom: 6px;
+.hero-title .ht-line { display: block; }
+.hero-title .ht-line2 { position: relative; display: inline-block; }
+.hero-title .ht-line2::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -.14em;
+  height: 2px; background: var(--zhu); transform-origin: left;
+  box-shadow: 0 0 16px rgba(216,68,47,.55);
 }
-.hero-brand {
-  font-size: 10px; letter-spacing: 5px;
-  color: rgba(184,130,10,0.4); margin-bottom: 32px;
+.hero-title em { color: #f7f5ef; font-style: normal; }
+
+.hero-lede {
+  margin: clamp(28px,4vh,40px) 0 0; max-width: 32em;
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: clamp(15px,1.35vw,18px); line-height: 2.15;
+  letter-spacing: .035em; color: rgba(245,243,237,.74);
 }
-.hero-stats {
-  display: flex; gap: 32px; flex-wrap: wrap;
+.hero-lede b { font-weight: 500; color: #f7f5ef; }
+
+.hero-meta {
+  display: flex; align-items: baseline; flex-wrap: wrap;
+  margin: clamp(34px,5vh,52px) 0 0;
 }
-.hero-stat {
-  display: flex; flex-direction: column; gap: 3px;
+.hm { display: flex; align-items: baseline; gap: 10px; }
+.hm b {
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: clamp(26px,3vw,40px); color: #f7f5ef;
+  letter-spacing: .01em; font-variant-numeric: tabular-nums; line-height: 1;
 }
-.hero-stat-num {
-  font-family: 'Noto Sans SC', sans-serif;
-  font-size: 22px; font-weight: 300;
-  color: var(--gold); letter-spacing: 1px;
+.hm span {
+  font-family: 'Noto Sans SC', sans-serif; font-size: 12px;
+  letter-spacing: .2em; color: rgba(245,243,237,.5);
 }
-.hero-stat-label {
-  font-size: 10px; color: rgba(248,244,237,0.35);
-  letter-spacing: 2px;
+.hm-sep {
+  width: 1px; height: 24px; background: rgba(245,243,237,.16);
+  margin: 0 clamp(18px,2.6vw,38px); align-self: center;
+}
+
+/* 时代轴 · 整张图谱的骨架，作首屏签名 */
+.era-axis {
+  margin: clamp(44px,7vh,76px) 0 0;
+  display: flex; align-items: center;
+  max-width: 880px;
+}
+.ea-node {
+  display: flex; flex-direction: column; align-items: center; gap: 9px;
+  flex: 0 0 auto;
+}
+.ea-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(245,243,237,.55);
+}
+.ea-node.now .ea-dot {
+  width: 9px; height: 9px; background: var(--zhu);
+  box-shadow: 0 0 0 5px rgba(216,68,47,.16), 0 0 18px rgba(216,68,47,.6);
+}
+.ea-label {
+  font-family: 'Noto Serif SC', serif; font-weight: 400;
+  font-size: 12px; letter-spacing: .22em; color: rgba(245,243,237,.55);
+}
+.ea-node.now .ea-label { color: #f7f5ef; }
+.ea-line { flex: 1 1 auto; height: 1px; background: rgba(245,243,237,.16); margin-top: -19px; }
+
+/* 通往「为何而读」的引线 */
+.hero-why {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin: clamp(30px,4.5vh,46px) 0 0;
+  font-family: 'Noto Serif SC', serif; font-weight: 300;
+  font-size: clamp(14px,1.2vw,16px); letter-spacing: .06em;
+  color: rgba(245,243,237,.64); cursor: pointer;
+  background: none; border: none; border-bottom: 1px solid rgba(245,243,237,.22);
+  padding: 0 0 5px; transition: color .22s, border-color .22s;
+}
+.hero-why:hover { color: #f7f5ef; border-bottom-color: var(--zhu); }
+.hero-why i { color: var(--zhu); font-style: normal; transition: transform .22s; }
+.hero-why:hover i { transform: translateX(4px); }
+
+/* 滚动提示 */
+.hero-scroll {
+  position: absolute; left: 50%; bottom: clamp(20px,3vh,34px);
+  transform: translateX(-50%); z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(245,243,237,.4); pointer-events: none;
+}
+.hero-scroll span { font-family: 'Noto Sans SC',sans-serif; font-size: 10px; letter-spacing: .3em; }
+.hero-scroll i {
+  width: 1px; height: 26px; background: linear-gradient(to bottom, rgba(245,243,237,.5), transparent);
+  animation: scrollPulse 1.9s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:.25;transform:scaleY(.7)} 50%{opacity:.9;transform:scaleY(1)} }
+
+/* 载入动画 */
+@keyframes heroRise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
+@keyframes heroUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes heroSeal { from { opacity: 0; transform: scale(.3); } to { opacity: 1; transform: scale(1); } }
+.hero-eyebrow, .hero-kicker, .ht-line, .hero-lede, .hero-meta, .era-axis, .hero-why {
+  opacity: 0; animation: heroRise 1s cubic-bezier(.22,.7,.2,1) forwards;
+}
+.hero-eyebrow { animation-delay: .5s; }
+.hero-kicker  { animation-delay: .62s; }
+.ht-line      { animation-delay: .74s; }
+.ht-line2     { animation-delay: .9s; }
+.hero-lede    { animation-delay: 1.14s; }
+.hero-meta    { animation-delay: 1.32s; }
+.era-axis     { animation-delay: 1.5s; }
+.hero-why     { animation-delay: 1.68s; }
+.hero-title .ht-line2::after { transform: scaleX(0); animation: heroUnderline .8s cubic-bezier(.22,.7,.2,1) forwards 1.6s; }
+.ea-node.now .ea-dot { animation: heroSeal .7s ease forwards 2.1s; }
+.hero-scroll { opacity: 0; animation: heroRise 1s ease forwards 2.3s; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow, .hero-kicker, .ht-line, .hero-lede, .hero-meta, .era-axis, .hero-why,
+  .hero-title .ht-line2::after, .ea-node.now .ea-dot, .hero-scroll {
+    animation: none !important; opacity: 1 !important; transform: none !important;
+  }
+  .hero-scroll i { animation: none !important; }
+}
+@media (max-width: 600px) {
+  .hero { min-height: clamp(540px, 84vh, 760px); }
+  .hm-sep { height: 18px; margin: 0 14px; }
+  .ea-label { font-size: 10px; letter-spacing: .12em; }
 }
 
 /* ── 导航第三项 ── */
@@ -970,14 +1123,14 @@ nav {
 </style>
 
 <style id="qc-style">
-#qc-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 18px;padding:14px 16px;
-  border:1px solid var(--line,#e3ddd0);border-radius:14px;background:rgba(0,0,0,.02)}
-#qc-bar .qc-label{font-size:13px;letter-spacing:.18em;opacity:.6;margin-right:4px}
-#qc-bar .qc{cursor:pointer;font:inherit;font-size:15px;padding:8px 18px;border-radius:999px;
-  border:1px solid var(--line,#d9d2c4);background:transparent;color:inherit;transition:.18s;line-height:1}
-#qc-bar .qc:hover{transform:translateY(-1px)}
-#qc-bar .qc.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
-@media(prefers-color-scheme:dark){#qc-bar .qc.on{background:#f0ece0;color:#111;border-color:#f0ece0}}
+#qc-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  margin:0;padding:15px clamp(26px,6vw,104px);
+  border-bottom:1px solid var(--border);background:var(--paper)}
+#qc-bar .qc-label{font-family:'Noto Sans SC',sans-serif;font-size:11px;letter-spacing:.22em;color:var(--ink3);margin-right:8px}
+#qc-bar .qc{cursor:pointer;font-family:'Noto Sans SC',sans-serif;font-size:13px;padding:6px 16px;border-radius:999px;
+  border:1px solid var(--border);background:transparent;color:var(--ink2);transition:.18s;line-height:1;letter-spacing:.04em}
+#qc-bar .qc:hover{border-color:var(--ink3);color:var(--ink)}
+#qc-bar .qc.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .stub-flag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;
   border:1px dashed currentColor;opacity:.6;margin-left:6px;vertical-align:middle}
 </style>
@@ -999,50 +1152,67 @@ nav {
     <button class="nav-tab" id="tab-scene" onclick="showPage('scene')">场景导航</button>
     <button class="nav-tab" id="tab-graph" onclick="showPage('graph')">关系图谱</button>
     <button class="nav-tab nav-tab-guide" id="tab-guide" onclick="showPage('guide')">向 导</button>
+    <button class="nav-tab" id="tab-why" onclick="showPage('why')">为何而读</button>
   </div>
   <div class="nav-stats" id="nav-stats"></div>
 </nav>
 
 <!-- LIBRARY PAGE -->
 <div class="page active" id="library-page">
-<div id="qc-bar">
-  <span class="qc-label">国家 / 地区</span>
-  <button class="qc on" data-c="*" onclick="quickCountry('*',this)">全部</button>
-  <button class="qc" data-c="中国" onclick="quickCountry('中国',this)">🇨🇳 中国</button>
-  <button class="qc" data-c="日本" onclick="quickCountry('日本',this)">🇯🇵 日本</button>
-  <button class="qc" data-c="韩国" onclick="quickCountry('韩国',this)">🇰🇷 韩国</button>
-</div>
-
-  <div class="hero">
-    <div class="hero-eyebrow">MAZEBOOK · LITERARY ATLAS · 东亚文学</div>
-    <div class="hero-title">东亚<em>文学</em>地图</div>
-    <div class="hero-sub">涵盖中国日本韩国 · 古代至未来 · 多维标签深度索引</div>
-    <div class="hero-brand">MAZEBOOK 东亚文学阅读地图 · 全球文学阅读路线指南</div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="hero-stat-num" id="stat-total">461</span>
-        <span class="hero-stat-label">部作品</span>
+  <header class="hero">
+    <canvas class="hero-canvas" id="hero-canvas"></canvas>
+    <div class="hero-veil"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">East Asian Literary Atlas</div>
+      <div class="hero-kicker"><span>中国</span><i></i><span>日本</span><i></i><span>韩国</span></div>
+      <h1 class="hero-title">
+        <span class="ht-line">东亚文学</span>
+        <span class="ht-line ht-line2">阅读地图</span>
+      </h1>
+      <p class="hero-lede">横跨中国 · 日本 · 韩国，自《诗经》至未来。<br>不按年代或作者，而按你<b>此刻的处境</b>，索引每一本书。</p>
+      <div class="hero-meta">
+        <div class="hm"><b id="stat-total">461</b><span>部作品</span></div>
+        <i class="hm-sep"></i>
+        <div class="hm"><b>5</b><span>个时代</span></div>
+        <i class="hm-sep"></i>
+        <div class="hm"><b>44</b><span>种体裁</span></div>
+        <i class="hm-sep"></i>
+        <div class="hm"><b id="stat-notes">0</b><span>条读者书笺</span></div>
       </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">5</span>
-        <span class="hero-stat-label">个时代</span>
+      <div class="era-axis" aria-hidden="true">
+        <div class="ea-node"><span class="ea-dot"></span><span class="ea-label">古代</span></div>
+        <span class="ea-line"></span>
+        <div class="ea-node"><span class="ea-dot"></span><span class="ea-label">近代</span></div>
+        <span class="ea-line"></span>
+        <div class="ea-node"><span class="ea-dot"></span><span class="ea-label">现代</span></div>
+        <span class="ea-line"></span>
+        <div class="ea-node now"><span class="ea-dot"></span><span class="ea-label">当代</span></div>
+        <span class="ea-line"></span>
+        <div class="ea-node"><span class="ea-dot"></span><span class="ea-label">未来</span></div>
       </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">44</span>
-        <span class="hero-stat-label">种体裁</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num" id="stat-notes">0</span>
-        <span class="hero-stat-label">条读者书笺</span>
-      </div>
+      <button class="hero-why" onclick="showPage('why')">为何，在这样的时代，仍要亲自去读？ <i>→</i></button>
     </div>
+    <div class="hero-scroll" aria-hidden="true"><span>向下展开书库</span><i></i></div>
+  </header>
+
+  <div id="qc-bar">
+    <span class="qc-label">国家 / 地区</span>
+    <button class="qc on" data-c="*" onclick="quickCountry('*',this)">全部</button>
+    <button class="qc" data-c="中国" onclick="quickCountry('中国',this)">🇨🇳 中国</button>
+    <button class="qc" data-c="日本" onclick="quickCountry('日本',this)">🇯🇵 日本</button>
+    <button class="qc" data-c="韩国" onclick="quickCountry('韩国',this)">🇰🇷 韩国</button>
   </div>
 
-  <div class="filter-bar">
+  <div class="filter-bar collapsed">
     <div class="filter-search">
       <input type="text" id="search-input" placeholder="搜索书名、作者、关键词…" oninput="onSearch()">
       <button class="clear-btn" onclick="clearAll()">重置</button>
     </div>
+    <button class="filter-toggle" id="filter-toggle" type="button" aria-expanded="false" onclick="toggleFilterPanel()">
+      <span>时代 · 体裁 · 心境 · 难度 · 地区</span>
+      <span class="ft-count" id="ft-count"></span>
+      <svg class="ft-chev" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <div class="filter-rows">
       <div class="filter-row">
         <span class="filter-label">时 代</span>
@@ -1085,7 +1255,7 @@ nav {
   <div class="scene-hero">
     <div class="scene-hero-label">层 02 · SCENE NAVIGATION</div>
     <div class="scene-hero-title">场景化导航</div>
-    <div class="scene-hero-sub">不按作者或年代，而按你此刻的心境——把阅读情绪变成可筛选的入口。<br>选择一个场景，发现最适合当下的那本书。</div>
+    <div class="scene-hero-sub">不按作者或年代，而按你此刻的心境，把阅读情绪变成可筛选的入口。<br>选择一个场景，发现最适合当下的那本书。</div>
   </div>
   <div class="scene-grid" id="scene-grid"></div>
   <div class="scene-results" id="scene-results" style="display:none">
@@ -1168,7 +1338,7 @@ nav {
     </div>
 
     <div class="guide-body">
-      <p class="guide-lead">有些时候，你打开这个网站，不是想找一本"关于某个主题"的书——</p>
+      <p class="guide-lead">有些时候，你打开这个网站，不是想找一本"关于某个主题"的书。</p>
       <p class="guide-lead">而是因为，你正卡在某个具体的处境里：</p>
 
       <div class="guide-moods">
@@ -1197,7 +1367,7 @@ nav {
         <ul class="guide-card-list">
           <li>你填写的，是一次对话的开始</li>
           <li>我为你挑选的书，附一封回信</li>
-          <li>每本书末尾留下分岔路口书单——读完之后，你还可以往哪走</li>
+          <li>每本书末尾留下分岔路口书单，读完之后你还可以往哪走</li>
           <li>读到任何一页想说话的时刻，都可以回来，告诉我一句</li>
         </ul>
         <a class="guide-cta" id="guide-cta-link" href="javascript:void(0)" onclick="openGuideQR()">从一次对话开始 →</a>
@@ -1205,11 +1375,176 @@ nav {
       </div>
 
       <p class="guide-foot-note">
-        如果你只是想随便看看，那也很好——<br>
+        如果你只是想随便看看，那也很好，<br>
         前面三层永远向你敞开，地图不会催你。<br>
         但如果你想要一条属于你自己的路，我在这里。
       </p>
     </div>
+
+  </div>
+</div>
+
+<!-- ════════ 层 05 · 为何而读 WHY READ ════════ -->
+<style id="why-style">
+#why-page{ background: radial-gradient(120% 70% at 50% 0%, #1b1914 0%, #100e0a 52%, #080705 100%);
+  color: rgba(245,243,237,.86); overflow-y:auto; max-height:100vh; }
+.why-wrap{ max-width: 940px; margin: 0 auto; padding: 0 clamp(24px,6vw,72px); }
+.why-mv{ padding: clamp(72px,13vh,150px) 0; border-bottom: 1px solid rgba(245,243,237,.06); }
+.why-mv:last-child{ border-bottom: none; }
+.why-reveal{ opacity:0; transform: translateY(26px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
+.why-reveal.in{ opacity:1; transform:none; }
+.why-eyebrow{ font-family:'Noto Sans SC',sans-serif; font-size:11px; letter-spacing:.42em;
+  text-transform:uppercase; color: rgba(245,243,237,.42); margin-bottom: 28px; }
+.why-q{ font-family:'Noto Serif SC',serif; font-weight:300; color:#f7f5ef;
+  font-size: clamp(30px,5.2vw,62px); line-height:1.34; letter-spacing:.03em; }
+.why-q .zhu{ position:relative; white-space:nowrap; }
+.why-q .zhu::after{ content:''; position:absolute; left:0; right:0; bottom:-.12em; height:2px;
+  background: var(--zhu); box-shadow:0 0 14px rgba(216,68,47,.55); }
+.why-lead{ font-family:'Noto Serif SC',serif; font-weight:300; font-size: clamp(16px,1.5vw,20px);
+  line-height: 2.2; letter-spacing:.03em; color: rgba(245,243,237,.8); max-width: 34em; }
+.why-lead b, .why-p b{ color:#f7f5ef; font-weight:500; }
+.why-p{ font-family:'Noto Serif SC',serif; font-weight:300; font-size: clamp(15px,1.4vw,18px);
+  line-height: 2.25; letter-spacing:.025em; color: rgba(245,243,237,.74); max-width: 33em; margin-top: 26px; }
+.why-section-label{ font-family:'Noto Sans SC',sans-serif; font-size:12px; letter-spacing:.34em;
+  color: var(--zhu); margin-bottom: 30px; opacity:.9; }
+
+/* 数据 */
+.why-stats{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: clamp(28px,4vw,56px); margin-top: 14px; }
+.why-stat-num{ font-family:'Noto Serif SC',serif; font-weight:300; color:#f7f5ef;
+  font-size: clamp(34px,4.6vw,58px); letter-spacing:.01em; font-variant-numeric: tabular-nums; line-height:1.05; }
+.why-stat-num .to{ color: var(--zhu); }
+.why-stat-num .arrow{ color: rgba(245,243,237,.35); margin:0 .2em; font-size:.7em; }
+.why-stat-cap{ margin-top:14px; font-family:'Noto Sans SC',sans-serif; font-size:13px; line-height:1.85;
+  letter-spacing:.02em; color: rgba(245,243,237,.6); }
+.why-stat-src{ margin-top:8px; font-size:11px; letter-spacing:.08em; color: rgba(245,243,237,.32); }
+.why-emph{ font-family:'Noto Serif SC',serif; font-weight:300; color:#f7f5ef;
+  font-size: clamp(22px,3vw,34px); line-height:1.6; letter-spacing:.04em; margin-top: clamp(40px,6vh,64px); }
+
+/* 计算器 */
+.why-calc{ margin-top: 40px; border:1px solid rgba(245,243,237,.12); border-radius: 18px;
+  padding: clamp(28px,4vw,46px); background: rgba(245,243,237,.02); }
+.why-calc-row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap: 30px 40px; }
+.why-field{ display:flex; flex-direction:column; gap:12px; }
+.why-field-label{ font-family:'Noto Sans SC',sans-serif; font-size:12px; letter-spacing:.2em; color: rgba(245,243,237,.55); }
+#why-age{ width: 130px; background: transparent; border:none; border-bottom:1px solid rgba(245,243,237,.3);
+  color:#f7f5ef; font-family:'Noto Serif SC',serif; font-weight:300; font-size: 40px; letter-spacing:.02em;
+  padding: 2px 4px; outline:none; transition: border-color .2s; }
+#why-age:focus{ border-bottom-color: var(--zhu); }
+.why-paces{ display:flex; gap:8px; flex-wrap:wrap; }
+.why-pace{ cursor:pointer; font-family:'Noto Sans SC',sans-serif; font-size:13px; letter-spacing:.04em;
+  padding: 9px 16px; border-radius:999px; border:1px solid rgba(245,243,237,.18);
+  background:transparent; color: rgba(245,243,237,.7); transition:.18s; line-height:1; }
+.why-pace:hover{ border-color: rgba(245,243,237,.5); color:#f7f5ef; }
+.why-pace.on{ background:#f7f5ef; color:#15130f; border-color:#f7f5ef; }
+.why-result{ margin-top: 38px; padding-top: 30px; border-top:1px solid rgba(245,243,237,.1); }
+.why-result-line{ font-family:'Noto Serif SC',serif; font-weight:300; font-size: clamp(18px,2vw,24px);
+  letter-spacing:.03em; color: rgba(245,243,237,.78); display:flex; align-items:baseline; flex-wrap:wrap; gap:.4em; }
+#why-num{ font-family:'Noto Serif SC',serif; font-weight:300; color: var(--zhu);
+  font-size: clamp(56px,9vw,108px); line-height:1; letter-spacing:.01em; font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 28px rgba(216,68,47,.35); }
+.why-num-cap{ margin-top:14px; font-family:'Noto Sans SC',sans-serif; font-size:13px; letter-spacing:.04em;
+  color: rgba(245,243,237,.5); }
+.why-turn{ margin-top: clamp(40px,6vh,64px); }
+.why-turn .why-emph{ margin-top: 0; }
+.why-461{ display:inline-flex; align-items:baseline; gap:.35em; }
+.why-461 b{ color: var(--zhu); font-weight:400; font-variant-numeric: tabular-nums; }
+
+/* 收束 */
+.why-close{ font-family:'Noto Serif SC',serif; font-weight:300; color:#f7f5ef;
+  font-size: clamp(22px,3.1vw,38px); line-height:1.7; letter-spacing:.04em; }
+.why-back{ display:inline-flex; align-items:center; gap:10px; margin-top: clamp(44px,6vh,70px);
+  font-family:'Noto Sans SC',sans-serif; font-size:14px; letter-spacing:.14em; color:#15130f;
+  background:#f7f5ef; border:none; border-radius:999px; padding: 14px 28px; cursor:pointer; transition:.2s; }
+.why-back:hover{ transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.why-foot{ margin-top: 30px; font-size:12px; letter-spacing:.06em; color: rgba(245,243,237,.34); line-height:1.9; }
+@media (prefers-reduced-motion: reduce){
+  .why-reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+}
+@media (max-width:600px){
+  #why-age{ font-size:34px; width:110px; }
+  .why-calc-row{ gap:24px 28px; }
+}
+</style>
+<div class="page" id="why-page">
+  <div class="why-wrap">
+
+    <section class="why-mv why-reveal">
+      <div class="why-eyebrow">Why Read · 为何而读</div>
+      <h2 class="why-q">一台机器，能在三秒里<br>读完一本书，并告诉你它讲了什么。<br>那么，你为什么还要<span class="zhu">亲自去读</span>？</h2>
+    </section>
+
+    <section class="why-mv why-reveal">
+      <div class="why-section-label">一 · 我们所处的此刻</div>
+      <p class="why-lead">这不是一个修辞问题。在 2026 年，它是悬在每一本书头上的刀。</p>
+      <div class="why-stats">
+        <div>
+          <div class="why-stat-num"><span data-to="28" data-suffix="%">0%</span><span class="arrow">→</span><span class="to" data-to="16" data-suffix="%">0%</span></div>
+          <div class="why-stat-cap">二十年里，每天为愉悦而读的人，从约 28% 跌到约 16%，少了近四成。</div>
+          <div class="why-stat-src">来源 · iScience / 美国时间使用调查（约 23.6 万人）</div>
+        </div>
+        <div>
+          <div class="why-stat-num"><span data-to="150" data-suffix="秒">0秒</span><span class="arrow">→</span><span class="to" data-to="47" data-suffix="秒">0秒</span></div>
+          <div class="why-stat-cap">盯着屏幕时，我们停在一处的专注时长，从约 2.5 分钟掉到 47 秒。</div>
+          <div class="why-stat-src">来源 · Gloria Mark《Attention Span》</div>
+        </div>
+        <div>
+          <div class="why-stat-num"><span class="to">∞</span></div>
+          <div class="why-stat-cap">与此同时，AI 生成的文字正无限涌来。信息，从未如此廉价。</div>
+          <div class="why-stat-src">2026 · 一个被文本淹没的年份</div>
+        </div>
+      </div>
+      <p class="why-emph">信息无限，而注意力，是唯一不会增加的东西。</p>
+    </section>
+
+    <section class="why-mv why-reveal">
+      <div class="why-section-label">二 · 我们认错了那场危机</div>
+      <p class="why-lead">面对 AI，多数人把它当成一场<b>知识</b>的危机：既然机器什么都知道，人还需要知道吗？</p>
+      <p class="why-p">但这认错了。机器擅长的是<b>表面</b>：摘要、要点、三十秒的速览。如果你只想知道一本书"说了什么"，它确实能替你拿走。我们真正缺的，从来不是知识，而是<b>筛选</b>。在无穷的文本里，分辨什么值得你交出宝贵的、不可再生的注意力。</p>
+      <p class="why-p">哲学家韩炳哲说，加速的时代里，我们失去了"驻留"的能力，无法在一件事上长久地停留。社会学家罗萨说，你可以更快地获取一切，却换不来"共鸣"：那种与世界相互回应、被一段文字真正触动的关系，无法被加速。本雅明则更早写道：<b>信息一经传递就被耗尽，而经验，会在你心里继续生长。</b></p>
+      <p class="why-p">所以，一本书给你的，从来不是它"讲了什么"。它给你的，是你与它共处的那一段时间。AI 可以替你知道，却没有人能替你度过。</p>
+    </section>
+
+    <section class="why-mv why-reveal">
+      <div class="why-section-label">三 · 把有限，算给你看</div>
+      <p class="why-lead">英国作家奥利弗·伯克曼提醒我们：一个人的一生，大约只有四千个星期。那么，换成书呢？</p>
+      <div class="why-calc">
+        <div class="why-calc-row">
+          <div class="why-field">
+            <span class="why-field-label">你今年几岁</span>
+            <input type="number" id="why-age" min="5" max="105" placeholder="—" oninput="whyCalc()" inputmode="numeric">
+          </div>
+          <div class="why-field">
+            <span class="why-field-label">你大约多久读完一本</span>
+            <div class="why-paces">
+              <button type="button" class="why-pace" onclick="whyPace(this,6)">从容 · 一年 6 本</button>
+              <button type="button" class="why-pace on" onclick="whyPace(this,12)">常态 · 一年 12 本</button>
+              <button type="button" class="why-pace" onclick="whyPace(this,24)">如饥似渴 · 一年 24 本</button>
+            </div>
+          </div>
+        </div>
+        <div class="why-result">
+          <div class="why-result-line">你这一生，大约还能读完<span id="why-num">—</span><span>本书。</span></div>
+          <div class="why-num-cap" id="why-num-cap">填入你的年龄，看看还剩多少。</div>
+        </div>
+      </div>
+      <div class="why-turn">
+        <p class="why-emph">而世上的书，以千万计。<br>于是问题从来不是"读什么都行"，<br>而是：把有限的注意力，留给真正值得的那几本。</p>
+        <p class="why-p">这张地图上，有 <span class="why-461"><b>461</b></span> 本。它存在的全部理由，就是帮你从那千万本中，由<b>迷宫书店</b>亲手选出，属于你的那几本。</p>
+      </div>
+    </section>
+
+    <section class="why-mv why-reveal">
+      <div class="why-section-label">四 · 为什么，偏偏是纸</div>
+      <p class="why-lead">一本纸书不震动、不弹窗、不会在你分心的那一秒把你带走。它是少数仍然为"专注"而设计的物。屏幕让人疲惫，纸让人安静。</p>
+      <p class="why-p">而最意外的是：被认为最离不开手机的那一代人，正在掉头走向纸。尼尔森的调查里，14–25 岁的读者约 <b>八成</b>更偏好纸质书，电子书仅约三成；纸书销量回到了本世纪的高点。这不是怀旧，而是一种清醒的选择：<b>在无限的滑动里，主动选择深度。</b></p>
+    </section>
+
+    <section class="why-mv why-reveal">
+      <p class="why-close">读一本书，不是为了知道它写了什么，<br>而是把一段不可重来的时间，认真地交出去。<br><br>AI 可以替你知道。<br>但没有人，能替你度过。</p>
+      <button type="button" class="why-back" onclick="showPage('library')">回到地图，开始挑选 →</button>
+      <p class="why-foot">数据来源：iScience《20 年美国时间使用调查中愉悦阅读的下降》；Gloria Mark《Attention Span》；尼尔森 BookData。思想引述：韩炳哲《倦怠社会》《沉思的生活》、哈特穆特·罗萨《共鸣》《社会加速》、瓦尔特·本雅明《讲故事的人》、奥利弗·伯克曼《四千周》。</p>
+      <p class="why-foot" style="margin-top:18px;border-top:1px solid rgba(245,243,237,.06);padding-top:18px">东亚文学阅读地图 · 迷宫书店 MAZEBOOK　©　2026　原创作品，保留所有权利。<br>设计、文案、数据与代码均属原创，未经授权请勿复制、镜像或商用。<br>授权 / 合作 / 侵权举报：1197340750@qq.com ｜ 微信 Nai-yaa</p>
+    </section>
 
   </div>
 </div>
@@ -1927,7 +2262,7 @@ function render() {
     container.innerHTML = `
       <div class="lib-empty-exit">
         <div class="lib-empty-title">这个组合下，地图上还没有书</div>
-        <div class="lib-empty-sub">不是你要求太多——是筛选器只懂体裁、年代、标签，<br>它读不懂你此刻真正想要的是什么。</div>
+        <div class="lib-empty-sub">不是你要求太多，是筛选器只懂体裁、年代、标签，<br>它读不懂你此刻真正想要的是什么。</div>
         <button class="lib-empty-btn" onclick="showPage('guide')">说说你真正想要的 →</button>
       </div>`;
     return;
@@ -2533,7 +2868,7 @@ function _gBlindSpotHTML(){
   let h='<b>这张地图看不见的：</b><br>';
   if(empty.length)h+='· 完全空白：'+empty.join('、')+'<br>';
   if(thin.length)h+='· 几近空白：'+thin.slice(0,6).join('、')+(thin.length>6?' …':'')+'<br>';
-  h+='<span style="color:rgba(248,244,237,0.4)">选一个意象，看它如何穿过这些边界——或提醒我们某处本该有书，却没有。</span>';
+  h+='<span style="color:rgba(248,244,237,0.4)">选一个意象，看它如何穿过这些边界，或提醒我们某处本该有书，却没有。</span>';
   return h;
 }
 
@@ -2589,7 +2924,7 @@ const SCENES = [
     id: 'be-struck',
     icon: '⚡',
     name: '想被击中一次',
-    desc: '那种读完会久久回不过神的作品——震撼、颠覆、或让你重新看待世界',
+    desc: '那种读完会久久回不过神的作品，震撼、颠覆、或让你重新看待世界',
     color: '#c45068',
     match: b => (b.m||[]).some(m=>['悲剧','脑洞大开','烧脑思辨'].includes(m)) && (b.dif||[]).some(d=>['大众','进阶'].includes(d)),
     why: b => '具有震撼性的阅读体验，读完会久久回神'
@@ -2634,7 +2969,7 @@ const SCENES = [
     id: 'think-deep',
     icon: '🧠',
     name: '思想探险',
-    desc: '挑战认知边界的作品——文学评论、先锋实验或跨文化思辨',
+    desc: '挑战认知边界的作品，文学评论、先锋实验或跨文化思辨',
     color: '#5080c8',
     match: b => (b.m||[]).includes('烧脑思辨') || (b.g||[]).some(g=>['文学评论','先锋派','魔幻现实主义'].includes(g)),
     why: b => '挑战思维边界，适合想深入思考的时候'
@@ -2716,7 +3051,7 @@ function initScenePage() {
     '<div class="scene-card scene-card-exit" onclick="showPage(\'guide\')">'
     + '<div class="scene-icon">🧭</div>'
     + '<div class="scene-name">地图之外</div>'
-    + '<div class="scene-desc">以上都不是你此刻的处境？地图不知道你站在哪——来和店主聊一次。</div>'
+    + '<div class="scene-desc">以上都不是你此刻的处境？地图不知道你站在哪，来和店主聊一次。</div>'
     + '<div class="scene-count">第四条路 →</div>'
     + '</div>'
   );
@@ -2984,7 +3319,7 @@ function renderForksArea(bookId) {
 
   let html = '<div class="forks-section">'
     + '<div class="forks-label"><span class="forks-cn">歧 路</span><span>FORKING PATHS</span></div>'
-    + '<div class="forks-intro">读完这本，你可以往三个方向走。每条岔路都标明了「为什么是这本」——这是地图替你计算的隐秘联系，不是黑箱。</div>'
+    + '<div class="forks-intro">读完这本，你可以往三个方向走。每条岔路都标明了「为什么是这本」，这是地图替你计算的隐秘联系，不是黑箱。</div>'
     + '<div class="fork-list">'
     + forkRow(forks.deep, 'deep')
     + forkRow(forks.side, 'side')
@@ -2998,7 +3333,7 @@ function renderForksArea(bookId) {
     +   (userForks.length ? '<span class="ct-badge">' + userForks.length + '</span>' : '')
     + '</button>'
     + '<div class="contrib-panel" id="nom-' + bookId + '">'
-    +   '<div class="contrib-hint">不必是评论里的"正确答案"——只要你真有过"读完这本、忍不住去翻那本"的经历。你的路径会成为这本书下的一条歧路。</div>'
+    +   '<div class="contrib-hint">不必是评论里的"正确答案"，只要你真有过"读完这本、忍不住去翻那本"的经历。你的路径会成为这本书下的一条歧路。</div>'
     +   '<div class="contrib-list">'
     +   (userForks.length ? userForks.map(f =>
           '<div class="contrib-card"><div class="cc-main">走向了 <span class="cc-link" onclick="jumpToTitle(\'' + (f.toTitle||'').replace(/'/g,"\\'") + '\')">' + (f.toTitle||'') + '</span></div>'
@@ -3022,7 +3357,7 @@ function renderForksArea(bookId) {
     +   (dissents.length ? '<span class="ct-badge">' + dissents.length + '</span>' : '')
     + '</button>'
     + '<div class="contrib-panel" id="dis-' + bookId + '">'
-    +   '<div class="contrib-hint">情绪标签是地图上最主观、最容易吵架的一种。挑一个你不认同的，说一句为什么——被采纳就直接改地图。这是最快改变地图的一条路。</div>'
+    +   '<div class="contrib-hint">情绪标签是地图上最主观、最容易吵架的一种。挑一个你不认同的，说一句为什么，被采纳就直接改地图。这是最快改变地图的一条路。</div>'
     +   '<div class="contrib-list">'
     +   (dissents.length ? dissents.map(d =>
           '<div class="contrib-card" style="border-left-color:var(--red)"><div class="cc-main">对 <span class="cc-link">' + d.tag + '</span> 提出异见</div>'
@@ -3041,7 +3376,7 @@ function renderForksArea(bookId) {
     + '</div></div>';
 
   // 身份说明
-  html += '<div class="identity-line">没有等级，没有称号。你来了，是<b>读者</b>；你开始写点什么，就是<b>批注者</b>。<br>往前走是自然的，不是任务——你停在哪一步都很好。</div>';
+  html += '<div class="identity-line">没有等级，没有称号。你来了，是<b>读者</b>；你开始写点什么，就是<b>批注者</b>。<br>往前走是自然的，不是任务，你停在哪一步都很好。</div>';
 
   html += '</div>';
   area.innerHTML = html;
@@ -3158,6 +3493,366 @@ function quickCountry(c, el){
   });
   render();
 }
+</script>
+<script>
+/* ── 首屏星野 · 461 部作品组成的流动星系 ── */
+(function(){
+  const cvs = document.getElementById('hero-canvas');
+  if(!cvs) return;
+  const ctx = cvs.getContext('2d');
+  cvs.style.pointerEvents = 'none';
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const ERA_ORDER = ['古代','近代','现代','当代','未来'];
+  const ERA_C = (typeof ERA_COL!=='undefined') ? ERA_COL :
+    {'古代':'#c4a44a','近代':'#6a9b4a','现代':'#3a8eba','当代':'#c45068','未来':'#8060c8'};
+
+  // 数据：优先真实 BOOKS，否则按已知分布合成
+  let data = [];
+  try{
+    if(typeof BOOKS!=='undefined' && BOOKS.length){
+      data = BOOKS.map(b=>({era: ERA_ORDER.includes(b.er)? b.er : '当代'}));
+    }
+  }catch(e){}
+  if(!data.length){
+    const dist={'古代':70,'近代':28,'现代':120,'当代':230,'未来':13};
+    for(const k in dist) for(let i=0;i<dist[k];i++) data.push({era:k});
+  }
+
+  function hex2rgb(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+  const RGB={}; ERA_ORDER.forEach(e=>RGB[e]=hex2rgb(ERA_C[e]||'#c45068'));
+
+  let W=0,H=0,dpr=Math.min(window.devicePixelRatio||1,2);
+  let pts=[];
+  const mouse={x:0,y:0,tx:0,ty:0};
+
+  function layout(){
+    const r=cvs.getBoundingClientRect();
+    W=r.width; H=r.height;
+    cvs.width=Math.round(W*dpr); cvs.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const pad=Math.min(W*0.06,70);
+    const bandW=(W-pad*2)/5;
+    // 每个时代一条纵向"星带"，带内抖动；越靠右(当代)越密
+    pts = data.map((d,i)=>{
+      const bi=ERA_ORDER.indexOf(d.era);
+      const cx=pad+bandW*(bi+0.5);
+      // 带内高斯抖动
+      const gx=(Math.random()+Math.random()+Math.random()-1.5)/1.5; // ~[-1,1]
+      const gy=(Math.random()+Math.random()+Math.random()-1.5)/1.5;
+      const x=cx+gx*bandW*0.62;
+      const y=H*0.5 + gy*H*0.46;
+      const z=0.35+Math.random()*0.65;            // 景深
+      const base=0.9+Math.random()*1.7;
+      return {
+        era:d.era, x, y, z,
+        r:base*(0.6+z*0.8),
+        phase:Math.random()*Math.PI*2,
+        sp:0.4+Math.random()*0.9,
+        amp:6+Math.random()*16,
+        tw:Math.random()*Math.PI*2,
+        // 入场：从原位附近散开
+        ox:x+(Math.random()-0.5)*W*0.5,
+        oy:y+(Math.random()-0.5)*H*0.5,
+        delay: (x/W)*0.5 + Math.random()*0.4
+      };
+    });
+  }
+
+  // 暗流连线
+  let arcs=[];
+  function spawnArc(){
+    if(pts.length<2) return;
+    const a=pts[(Math.random()*pts.length)|0];
+    // 偏向连接同/邻时代，形成"贯穿"
+    let b=pts[(Math.random()*pts.length)|0], tries=0;
+    while((b===a) && tries++<5) b=pts[(Math.random()*pts.length)|0];
+    arcs.push({a,b,t:0,life:2.6+Math.random()*2.2});
+  }
+
+  let t0=null, raf=null, running=true;
+  function frame(ts){
+    if(!running){ raf=null; return; }
+    if(t0==null) t0=ts;
+    const time=(ts-t0)/1000;
+    const intro=reduce?1:Math.min(1,time/1.6);
+    ctx.clearRect(0,0,W,H);
+
+    // 鼠标视差缓动
+    mouse.x+=(mouse.tx-mouse.x)*0.06; mouse.y+=(mouse.ty-mouse.y)*0.06;
+
+    // 连线（在点之下）
+    if(!reduce){
+      if(time>1.4 && arcs.length<5 && Math.random()<0.012) spawnArc();
+      for(let k=arcs.length-1;k>=0;k--){
+        const ar=arcs[k]; ar.t+=1/60;
+        const p=ar.t/ar.life;
+        if(p>=1){ arcs.splice(k,1); continue; }
+        const fade=Math.sin(Math.min(1,p)*Math.PI); // 0→1→0
+        const a=ar.a, b=ar.b;
+        const ax=a.x+Math.cos(time*a.sp+a.phase)*a.amp*a.z + (mouse.x*a.z*22);
+        const ay=a.y+Math.sin(time*a.sp+a.phase)*a.amp*a.z + (mouse.y*a.z*22);
+        const bx=b.x+Math.cos(time*b.sp+b.phase)*b.amp*b.z + (mouse.x*b.z*22);
+        const by=b.y+Math.sin(time*b.sp+b.phase)*b.amp*b.z + (mouse.y*b.z*22);
+        const mx=(ax+bx)/2, my=(ay+by)/2 - Math.abs(ax-bx)*0.18;
+        const rc=RGB[a.era];
+        ctx.strokeStyle='rgba('+rc[0]+','+rc[1]+','+rc[2]+','+(0.16*fade*intro)+')';
+        ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(ax,ay); ctx.quadraticCurveTo(mx,my,bx,by); ctx.stroke();
+      }
+    }
+
+    // 星点
+    for(let i=0;i<pts.length;i++){
+      const p=pts[i];
+      let px,py,a;
+      if(intro<1){
+        const local=Math.max(0,Math.min(1,(intro - p.delay*0.0)/1));
+        const e=1-Math.pow(1-Math.min(1,time/1.6 - p.delay),3); // 缓出
+        const k=Math.max(0,Math.min(1,e));
+        px=p.ox+(p.x-p.ox)*k;
+        py=p.oy+(p.y-p.oy)*k;
+        a=k;
+      }else{
+        const dx=Math.cos(time*p.sp+p.phase)*p.amp*p.z;
+        const dy=Math.sin(time*p.sp*0.8+p.phase)*p.amp*p.z;
+        px=p.x+dx + mouse.x*p.z*22;
+        py=p.y+dy + mouse.y*p.z*22;
+        a=reduce?0.85:(0.55+0.45*Math.sin(time*1.4+p.tw));
+      }
+      const rc=RGB[p.era];
+      const rr=p.r*(0.85+0.3*a);
+      // 光晕
+      ctx.beginPath();
+      const g=ctx.createRadialGradient(px,py,0,px,py,rr*4);
+      g.addColorStop(0,'rgba('+rc[0]+','+rc[1]+','+rc[2]+','+(0.5*a)+')');
+      g.addColorStop(1,'rgba('+rc[0]+','+rc[1]+','+rc[2]+',0)');
+      ctx.fillStyle=g;
+      ctx.arc(px,py,rr*4,0,Math.PI*2); ctx.fill();
+      // 核
+      ctx.beginPath();
+      ctx.fillStyle='rgba('+rc[0]+','+rc[1]+','+rc[2]+','+(0.9*a)+')';
+      ctx.arc(px,py,rr,0,Math.PI*2); ctx.fill();
+    }
+
+    if(reduce){ raf=null; return; } // 静态只画一帧
+    raf=requestAnimationFrame(frame);
+  }
+
+  function start(){ if(!raf){ t0=null; running=true; raf=requestAnimationFrame(frame);} }
+  function stop(){ running=false; if(raf){cancelAnimationFrame(raf); raf=null;} }
+
+  // 鼠标视差
+  if(!reduce){
+    window.addEventListener('mousemove',e=>{
+      mouse.tx=(e.clientX/window.innerWidth-0.5);
+      mouse.ty=(e.clientY/Math.max(1,window.innerHeight)-0.5);
+    },{passive:true});
+  }
+
+  // 尺寸 & 可见性
+  let rT;
+  function onResize(){ clearTimeout(rT); rT=setTimeout(()=>{layout(); if(reduce){t0=null; running=true; raf=requestAnimationFrame(frame);} },180); }
+  window.addEventListener('resize',onResize);
+
+  function init(){
+    layout();
+    if(reduce){ running=true; raf=requestAnimationFrame(frame); return; }
+    start();
+    if('IntersectionObserver' in window){
+      new IntersectionObserver((es)=>{ es.forEach(en=> en.isIntersecting?start():stop()); },{threshold:0.02})
+        .observe(cvs);
+    }
+  }
+  if(document.readyState==='complete'||document.readyState==='interactive') init();
+  else window.addEventListener('DOMContentLoaded',init);
+  // 字体载入后重排（避免布局尺寸变化）
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ setTimeout(()=>layout(),50); });
+})();
+</script>
+<script>
+/* ── 筛选面板折叠（移动端）+ 已选计数 ── */
+function updateFtCount(){
+  try{
+    var rows=document.querySelector('.filter-rows');
+    var n=rows?rows.querySelectorAll('.chip.on').length:0;
+    var s=document.getElementById('search-input');
+    if(s && s.value.trim()) n++;
+    var el=document.getElementById('ft-count');
+    if(el) el.textContent = n>0 ? String(n) : '';
+  }catch(e){}
+}
+function toggleFilterPanel(){
+  var fb=document.querySelector('.filter-bar');
+  if(!fb) return;
+  var collapsed=fb.classList.toggle('collapsed');
+  var t=document.getElementById('filter-toggle');
+  if(t) t.setAttribute('aria-expanded', collapsed?'false':'true');
+}
+(function(){
+  function bind(){
+    var fb=document.querySelector('.filter-bar');
+    if(fb) fb.addEventListener('click', function(){ setTimeout(updateFtCount,0); });
+    var s=document.getElementById('search-input');
+    if(s) s.addEventListener('input', function(){ setTimeout(updateFtCount,0); });
+    setTimeout(updateFtCount,300);
+  }
+  if(document.readyState!=='loading') bind();
+  else document.addEventListener('DOMContentLoaded', bind);
+})();
+</script>
+<script>
+/* ── 第五层「为何而读」：切页 · 显影 · 数字 · 余生计算 ── */
+(function(){
+  var prev = window.showPage;
+  window.showPage = function(p){
+    if (typeof prev === 'function') prev(p);
+    if (p === 'why'){
+      var el = document.getElementById('why-page');
+      if (el){
+        el.classList.add('active');
+        var t = document.getElementById('tab-why'); if (t) t.classList.add('active');
+        el.scrollTop = 0;
+        setTimeout(whyRevealAll, 40);
+      }
+    }
+  };
+})();
+
+function whyCountUp(el){
+  var to = parseFloat(el.dataset.to);
+  if (isNaN(to)) return;
+  var from = parseFloat(el.dataset.from || '0');
+  var suffix = el.dataset.suffix || '';
+  var dur = 1100, t0 = null;
+  function step(ts){
+    if (!t0) t0 = ts;
+    var k = Math.min(1, (ts - t0) / dur);
+    var e = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(from + (to - from) * e) + suffix;
+    if (k < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+var whyObs = null;
+function whyRevealAll(){
+  var page = document.getElementById('why-page');
+  if (!page) return;
+  var items = page.querySelectorAll('.why-reveal');
+  if (!('IntersectionObserver' in window)){
+    items.forEach(function(x){ x.classList.add('in'); });
+    return;
+  }
+  if (!whyObs){
+    whyObs = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if (en.isIntersecting){
+          en.target.classList.add('in');
+          en.target.querySelectorAll('[data-to]').forEach(function(n){
+            if (!n._counted){ n._counted = true; whyCountUp(n); }
+          });
+          whyObs.unobserve(en.target);
+        }
+      });
+    }, { root: page, threshold: 0.16 });
+  }
+  items.forEach(function(x){ whyObs.observe(x); });
+}
+
+window._whyPace = 12;
+function whyPace(btn, v){
+  window._whyPace = v;
+  document.querySelectorAll('.why-pace').forEach(function(x){ x.classList.remove('on'); });
+  btn.classList.add('on');
+  whyCalc();
+}
+function whyCalc(){
+  var ageEl = document.getElementById('why-age');
+  var numEl = document.getElementById('why-num');
+  var capEl = document.getElementById('why-num-cap');
+  if (!ageEl || !numEl) return;
+  var age = parseInt(ageEl.value, 10);
+  if (isNaN(age) || age < 5){
+    numEl.textContent = '—';
+    if (capEl) capEl.textContent = '填入你的年龄，看看还剩多少。';
+    return;
+  }
+  if (age > 105) age = 105;
+  var life = 85;
+  var years = Math.max(0, life - age);
+  var n = years * (window._whyPace || 12);
+  numEl.dataset.from = (numEl.textContent || '0').replace(/[^\d]/g, '') || 0;
+  numEl.dataset.to = n;
+  whyCountUp(numEl);
+  if (capEl){
+    if (years <= 0) capEl.textContent = '往后的每一本，都是赚来的。请慢慢挑。';
+    else capEl.textContent = '按你现在的速度，约 ' + years + ' 年里，你大概只能读完这些。';
+  }
+}
+</script>
+<script>
+/* ════════ 版权与防搬运（诚实版：威慑 + 可追溯，非绝对防护）════════ */
+(function(){
+  /* ── ① 控制台版权提示 ── */
+  try{
+    console.log('%c东亚文学阅读地图 · 迷宫书店 MAZEBOOK',
+      'color:#d8442f;font-size:15px;font-weight:700;letter-spacing:1px');
+    console.log('%c© 2026 迷宫书店 · 原创作品，保留所有权利。',
+      'color:#a98b4e;font-size:12px');
+    console.log('%c这套设计、文案、数据与代码均为原创。未经授权的复制、镜像、再分发或商用属于侵权行为，将保留追责权利。\n如需授权或合作，欢迎联系店主：邮箱 1197340750@qq.com ｜ 微信 Nai-yaa',
+      'color:#888;font-size:12px;line-height:1.6');
+  }catch(e){}
+
+  /* ── ② 隐藏水印（便于在盗版上取证）── */
+  try{
+    window.__MAZEBOOK_ORIGIN__ = '东亚文学阅读地图 · © 2026 迷宫书店 · sig:mazebook-dctn-2026';
+    document.documentElement.setAttribute('data-origin','mazebook-2026');
+  }catch(e){}
+
+  /* ── ③ 软域名锁（可选）──
+     默认关闭：ALLOWED_HOSTS 为空时不做任何限制。
+     上线后，把你的正式域名填进数组即可启用；
+     本地预览(file://、localhost)永远放行，不会影响你自己调试。
+     注意：这只能挡住"原样搬走重新上线"的人，懂代码者可绕过——它是门槛，不是锁死。 */
+  var ALLOWED_HOSTS = [
+    // '你的域名.com', 'www.你的域名.com'
+  ];
+  try{
+    var host = location.hostname;
+    var isDev = (host==='' || host==='localhost' || host==='127.0.0.1' || location.protocol==='file:');
+    if (ALLOWED_HOSTS.length && !isDev && ALLOWED_HOSTS.indexOf(host) === -1){
+      var build = function(){
+        var ov = document.createElement('div');
+        ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#0a0906;color:#f4f2ec;'+
+          'display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;'+
+          'padding:40px;gap:18px;font-family:"Noto Serif SC",serif';
+        ov.innerHTML =
+          '<div style="font-size:24px;letter-spacing:.12em;color:#f7f5ef">这是一个未经授权的副本</div>'+
+          '<div style="font-size:14px;color:#9a948a;line-height:2;max-width:30em;font-family:\'Noto Sans SC\',sans-serif">'+
+          '「东亚文学阅读地图」是迷宫书店 MAZEBOOK 的原创作品。<br>你正访问的并非官方站点。请前往官方地址，或联系店主获取授权：1197340750@qq.com（微信 Nai-yaa）。</div>';
+        document.body.appendChild(ov);
+        document.documentElement.style.overflow='hidden';
+      };
+      if (document.body) build(); else document.addEventListener('DOMContentLoaded', build);
+    }
+  }catch(e){}
+
+  /* ── ④ 轻度防呆（可选，默认关闭）──
+     设为 true 会屏蔽右键菜单与 F12/Ctrl+U 等快捷键。
+     说明：对懂技术的人无效，且会影响正常用户（无法复制书名、无法新标签打开链接、不利无障碍）。
+     不建议长期开启；如确需，改成 true 即可。 */
+  var ENABLE_CASUAL_HARDENING = false;
+  if (ENABLE_CASUAL_HARDENING){
+    document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+    document.addEventListener('keydown', function(e){
+      var k = (e.key||'').toLowerCase();
+      if (e.key==='F12' ||
+          (e.ctrlKey && e.shiftKey && (k==='i'||k==='j'||k==='c')) ||
+          (e.ctrlKey && k==='u')) { e.preventDefault(); }
+    });
+  }
+})();
 </script>
 </body>
 </html>
